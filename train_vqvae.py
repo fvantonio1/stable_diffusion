@@ -1,5 +1,6 @@
 from models.vqvae import VQVAE
 from models.discriminator import Discriminator
+from models.lpips import LPIPS
 from dataset.mnist import MnistDataLoader
 from dataset.celeba import CelebDataLoader
 import torch
@@ -55,8 +56,8 @@ def train(args):
     # discriminator and disc loss
     discriminator = Discriminator(im_channels=dataset_config['im_channels']).to(device)
     disc_criterion = torch.nn.MSELoss()
-
-    # TODO: lpips model
+    # lpips model
+    lpips_model = LPIPS().eval().to(device)
 
     optimizer_g = torch.optim.Adam(model.parameters(),
                                    lr=train_config['autoencoder_lr'], betas=(0.5, 0.999))
@@ -132,6 +133,9 @@ def train(args):
                                                        device=disc_fake_pred.device))
             
             g_loss += train_config['disc_weight'] * disc_fake_loss
+
+        lpips_loss = torch.mean(lpips_model(output_imgs, imgs))
+        g_loss += train_config['perceptual_weight'] * lpips_loss
             
         g_loss.backward()
         optimizer_g.step()
@@ -197,7 +201,7 @@ def train(args):
                 'model' : model.state_dict(),
                 'config' : config,
                 'step' : step,
-            #    'val_loss' : val_loss_accum.item()
+                'loss' : g_loss.item()
             }
 
             torch.save(checkpoint, checkpoint_path)

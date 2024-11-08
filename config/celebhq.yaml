@@ -54,11 +54,11 @@ train_params:
   ldm_lr: 0.000005
   autoencoder_lr: 0.00001
   autoencoder_acc_steps: 4
-  autoencoder_img_save_steps: 64
+  autoencoder_img_save_steps: 250
   save_latents : False
   vae_latent_dir_name: 'vae_latents'
   vqvae_latent_dir_name: 'vqvae_latents'
-  ldm_ckpt_name: 'ddpm_ckpt.pth'
+  ldm_ckpt_dir: 'ddpm_ckpt'
   vqvae_autoencoder_ckpt_dir: 'vqvae_ckpt'
   vae_autoencoder_ckpt_name: 'vae_autoencoder_ckpt.pth'
   vqvae_discriminator_ckpt_name: 'vqvae_discriminator_ckpt.pth'

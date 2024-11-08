@@ -61,7 +61,7 @@ def train(config):
     ckpt = torch.load(ckpt)
 
     vae.load_state_dict(ckpt['model'])
-    print(f"Loaded VQVAE checkpoint with {ckpt['val_loss']} val loss")
+    print(f"Loaded VQVAE checkpoint")# with {ckpt['val_loss']} val loss")
 
     # freeze vae parameters
     for param in vae.parameters():
